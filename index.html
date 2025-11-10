@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AR Life Cycle: Scan Any Marker</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Quentin Tarantino AR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- A-Frame & AR.js NFT -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.4/aframe/build/aframe-ar-nft.js"></script>
 
@@ -13,23 +14,19 @@
     #statusBox {
       position: absolute;
       top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.7);
+      left: 10px;
+      background: rgba(0,0,0,0.6);
       color: #fff;
-      padding: 10px 15px;
-      border-radius: 10px;
-      font-family: 'Georgia', serif;
-      font-size: 16px;
-      text-align: center;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-family: sans-serif;
+      font-size: 14px;
       z-index: 10;
     }
   </style>
 </head>
 <body>
-  <div id="statusBox">
-    <p id="narrative-text">Scan any marker to show its content. 🌱🌳🌾</p>
-  </div>
+  <div id="statusBox">Scan the baby marker first</div>
 
   <a-scene
     vr-mode-ui="enabled: false"
@@ -37,129 +34,108 @@
     renderer="logarithmicDepthBuffer: true;"
     arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
 
-    <!-- lights -->
-    <a-entity light="type: ambient; intensity: 0.9"></a-entity>
-    <a-entity light="type: directional; intensity: 0.5" position="1 1 1"></a-entity>
+    <!-- Lights -->
+    <a-entity light="type: ambient; intensity: 0.8"></a-entity>
+    <a-entity light="type: directional; intensity: 0.6" position="0 1 1"></a-entity>
 
-    <!-- SEED -->
-    <a-nft id="marker-seed" type="nft" url="tree_vector ">
-      <a-entity id="model-baby"
+    <!-- Hollywood marker -->
+    <a-nft id="marker-hollywood" type="nft" url="seed-icon-free-vector">
+      <a-entity id="model-hollywood"
                 gltf-model="baby.glb"
-                scale="50 50 50"
-                position="0 100 0"
-                rotation="90 180 0"
-                visible="false">
-      </a-entity>
-      <a-entity id="text-seed"
-                text="value: BIRTH - The beginning of life; align: center; color: #1DD300; width: 800"
-                position="0 -50 0"
+                scale="100 100 100"
+                position="0 0 0"
                 rotation="-90 0 0"
-                visible="false">
-      </a-entity>
+                visible="false"></a-entity>
     </a-nft>
 
-    <!-- TREE -->
-    <a-nft id="marker-tree" type="nft" url="seed-icon-free-vector">
-      <a-entity id="model-adult"
+    <!-- Reservoir Dogs marker -->
+    <a-nft id="marker-reservoir" type="nft" url="tree-vector (1)">
+      <a-entity id="model-reservoir"
                 gltf-model="human.glb"
                 scale="50 50 50"
-                position="0 100 0"
-                rotation="90 180 0"
-                animation-mixer="clip: *"
-                visible="false">
-      </a-entity>
-      <a-entity id="text-tree"
-                text="value: FLOURISHING - Bearing fruits of labor; align: center; color: #FF8C00; width: 800"
-                position="0 -50 0"
-                rotation="-90 0 0"
-                visible="false">
-      </a-entity>
+                position="0 0 0"
+                rotation="90 0 0"
+                visible="false"></a-entity>
     </a-nft>
 
-    <!-- ELDER -->
-    <a-nft id="marker-elder" type="nft" url="old_tree">
-      <a-entity id="model-elder"
+    <!-- Pulp Fiction marker -->
+    <a-nft id="marker-pulp" type="nft" url="old_tree">
+      <a-entity id="model-pulp"
                 gltf-model="oldman_ernest.glb"
-                scale="50 50 50"
-                position="0 100 0"
-                rotation="90 180 0"
-                visible="false">
-      </a-entity>
-      <a-entity id="text-elder"
-                text="value: WISDOM - Seeds of knowledge remain; align: center; color: #8B4513; width: 800"
-                position="0 -50 0"
-                rotation="-90 0 0"
-                visible="false">
-      </a-entity>
+                scale="10 10 10"
+                position="0 0 0"
+                rotation="90 0 0"
+                visible="false"></a-entity>
     </a-nft>
 
-    <!-- PRIZE (optional) -->
-    <a-nft id="marker-prize" type="nft" url="priza">
-      <a-entity text="value: CYCLE COMPLETE; align: center; color: #FFD700; width: 400"
-                position="0 100 0"
-                rotation="-90 0 0"
-                visible="false">
-      </a-entity>
+    <!-- Kill Bill marker -->
+    <a-nft id="marker-killbill" type="nft" url="kill_bill">
+      <a-entity gltf-model="uma_thurman_kill_bill.glb"
+                scale="0.5 0.5 0.5"
+                position="0 0 0"
+                rotation="90 180 0"></a-entity>
     </a-nft>
 
     <a-entity camera></a-entity>
   </a-scene>
 
   <script>
-    // Utility: returns all child elements (except the a-nft root itself and camera)
-    function getMarkerChildren(markerEl) {
-      return Array.from(markerEl.querySelectorAll('*')).filter(el => {
-        // exclude the marker element itself and the camera
-        return el !== markerEl && el.tagName.toLowerCase() !== 'a-camera';
-      });
-    }
+    const statusBox = document.getElementById('statusBox');
+    const markerHollywood = document.getElementById('marker-hollywood');
+    const markerReservoir = document.getElementById('marker-reservoir');
+    const markerPulp = document.getElementById('marker-pulp');
 
-    // Grab elements
-    const narrativeText = document.getElementById('narrative-text');
-    const markerSeed = document.getElementById('marker-seed');
-    const markerTree = document.getElementById('marker-tree');
-    const markerElder = document.getElementById('marker-elder');
-    const markerPrize = document.getElementById('marker-prize');
+    const modelHollywood = document.getElementById('model-hollywood');
+    const modelReservoir = document.getElementById('model-reservoir');
+    const modelPulp = document.getElementById('model-pulp');
 
-    const elementsSeed = getMarkerChildren(markerSeed);
-    const elementsTree = getMarkerChildren(markerTree);
-    const elementsElder = getMarkerChildren(markerElder);
-    const elementsPrize = getMarkerChildren(markerPrize);
+    let hollywoodScanned = false;
+    let reservoirScanned = false;
 
-    // Show/hide helper (uses 'true'/'false' strings for a-frame compatibility)
-    function setVisible(elements, visible) {
-      elements.forEach(el => el.setAttribute('visible', visible ? 'true' : 'false'));
-    }
+    // --- Hollywood ---
+    markerHollywood.addEventListener('markerFound', () => {
+      modelHollywood.setAttribute('visible', 'true');
+      if (!hollywoodScanned) {
+        hollywoodScanned = true;
+        statusBox.innerHTML = '✅ Baby scanned! Now scan the next phase';
+      }
+    });
+    markerHollywood.addEventListener('markerLost', () => {
+      modelHollywood.setAttribute('visible', 'false');
+    });
 
-    // When any marker is found, show its children; when lost, hide them.
-    // No inter-stage restrictions — each marker works independently.
-    function attachSimpleToggle(markerEl, elements, label) {
-      markerEl.addEventListener('markerFound', () => {
-        console.log(`${label} found`);
-        setVisible(elements, true);
-        narrativeText.innerText = `✅ ${label} marker found`;
-      });
-      markerEl.addEventListener('markerLost', () => {
-        console.log(`${label} lost`);
-        setVisible(elements, false);
-        narrativeText.innerText = `Scan any marker to show its content.`;
-      });
-    }
+    // --- Reservoir Dogs ---
+    markerReservoir.addEventListener('markerFound', () => {
+      if (hollywoodScanned) {
+        modelReservoir.setAttribute('visible', 'true');
+        if (!reservoirScanned) {
+          reservoirScanned = true;
+          statusBox.innerHTML = '✅ Adult scanned! Now scan the next phase';
+        }
+      } else {
+        statusBox.innerHTML = '⚠️ Scan baby first!';
+      }
+    });
+    markerReservoir.addEventListener('markerLost', () => {
+      modelReservoir.setAttribute('visible', 'false');
+    });
 
-    attachSimpleToggle(markerSeed, elementsSeed, 'SEED (BIRTH)');
-    attachSimpleToggle(markerTree, elementsTree, 'TREE (FLOURISHING)');
-    attachSimpleToggle(markerElder, elementsElder, 'ELDER (WISDOM)');
-    attachSimpleToggle(markerPrize, elementsPrize, 'PRIZE');
 
-    // Ensure everything is hidden when the scene is ready
-    const scene = document.querySelector('a-scene');
-    scene.addEventListener('loaded', () => {
-      setVisible(elementsSeed, false);
-      setVisible(elementsTree, false);
-      setVisible(elementsElder, false);
-      setVisible(elementsPrize, false);
-      console.log('scene loaded — all marker content hidden by default');
+
+
+    // --- Pulp Fiction ---
+    markerPulp.addEventListener('markerFound', () => {
+      if (hollywoodScanned && reservoirScanned) {
+        modelPulp.setAttribute('visible', 'true');
+        statusBox.innerHTML = 'All markers scanned in order! Life-cycle complete';
+      } else if (!reservoirScanned) {
+        statusBox.innerHTML = '⚠️ Scan adult before this';
+      }
+    });
+    markerPulp.addEventListener('markerLost', () => {
+      modelPulp.setAttribute('visible', 'false');
     });
   </script>
 </body>
 </html>
+
