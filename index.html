@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <title>AR Life Cycle: Seed, Tree, Wisdom</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.4/aframe/build/aframe-ar-nft.js"></script>
-    <script src="https://unpkg.com/aframe-particle-system-component@1.0.9/dist/aframe-particle-system-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-animation-component@5.1.2/dist/aframe-animation-component.min.js"></script>
-
+    
     <style>
         body, html { margin: 0; overflow: hidden; width: 100%; height: 100%; }
         #statusBox {
@@ -36,33 +34,18 @@
     <a-scene
         vr-mode-ui="enabled: false"
         embedded
-        renderer="logarithmicDepthBuffer: true; colorManagement: true;"
+        renderer="logarithmicDepthBuffer: true;"
         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
-
-        <a-assets>
-            <a-asset-item id="baby-model" src="baby.glb"></a-asset-item>
-            
-            <a-asset-item id="adult-model" src="human.glb"></a-asset-item>
-            
-            <a-asset-item id="elder-model" src="oldman_ernest.glb"></a-asset-item>
-        </a-assets>
-
+        
         <a-entity light="type: ambient; intensity: 0.9"></a-entity>
         <a-entity light="type: directional; intensity: 0.5" position="1 1 1"></a-entity>
-        <a-entity camera></a-entity>
 
         <a-nft id="marker-seed" type="nft" url="seed-icon-free-vector">
             <a-entity id="model-baby"
-                      gltf-model="#baby-model"
+                      gltf-model="baby.glb"
                       scale="50 50 50"
                       position="0 100 0"
                       rotation="90 180 0"
-                      animation__rotate="property: rotation; to: 90 540 0; loop: true; dur: 10000; easing: linear"
-                      visible="false">
-            </a-entity>
-            <a-entity id="particles-seed"
-                      particle-system="preset: snow; particleCount: 500; color: #1DD300,#81C784; maxAge: 3; size: 0.5; velocityValue: 0 0.5 0;"
-                      position="0 100 0"
                       visible="false">
             </a-entity>
             <a-entity id="text-seed"
@@ -73,22 +56,15 @@
             </a-entity>
         </a-nft>
 
-        <a-nft id="marker-tree" type="nft" url="tree-vector (1)">
+        <a-nft id="marker-tree" type="nft" url="tree_vector">
             <a-entity id="model-adult"
-                      gltf-model="#adult-model"
+                      gltf-model="human.glb" 
                       scale="50 50 50"
                       position="0 100 0"
                       rotation="90 180 0"
-                      
                       animation-mixer="clip: *" 
-                      
-                      animation__pulse="property: scale; dir: alternate; from: 48 48 48; to: 52 52 52; loop: true; dur: 1500; easing: easeInOutSine"
                       visible="false">
             </a-entity>
-            <a-sphere color="#FFD700" radius="5" position="50 150 20"
-                      animation__move1="property: position; to: 50 180 20; dir: alternate; loop: true; dur: 2000;"></a-sphere>
-            <a-sphere color="#FF4500" radius="5" position="-50 150 -20"
-                      animation__move2="property: position; to: -50 180 -20; dir: alternate; loop: true; dur: 2500;"></a-sphere>
             <a-entity id="text-tree"
                       text="value: FLOURISHING - Bearing fruits of labor; align: center; color: #FF8C00; width: 800"
                       position="0 -50 0"
@@ -99,15 +75,10 @@
 
         <a-nft id="marker-elder" type="nft" url="old_tree">
             <a-entity id="model-elder"
-                      gltf-model="#elder-model"
+                      gltf-model="oldman_ernest.glb"
                       scale="50 50 50"
                       position="0 100 0"
                       rotation="90 180 0"
-                      visible="false">
-            </a-entity>
-            <a-entity id="particles-elder"
-                      particle-system="preset: star; particleCount: 300; color: #8B4513,#D2B48C; maxAge: 2; size: 0.8; velocityValue: 0 -0.5 0; rotationAngle: 45;"
-                      position="0 150 0"
                       visible="false">
             </a-entity>
             <a-entity id="text-elder"
@@ -119,109 +90,90 @@
         </a-nft>
 
         <a-nft type="nft" url="priza">
-            <a-text value="CYCLE COMPLETE: THE PRIZE"
-                    align="center"
-                    width="400"
-                    color="#FFD700"
-                    position="0 100 0"
-                    rotation="-90 0 0">
-            </a-text>
+            <a-entity text="value: CYCLE COMPLETE; align: center; color: #FFD700; width: 400"
+                      position="0 100 0"
+                      rotation="-90 0 0">
+            </a-entity>
         </a-nft>
 
+        <a-entity camera></a-entity>
     </a-scene>
 
     <script>
-        const statusBox = document.getElementById('statusBox');
-        const narrativeText = document.getElementById('narrative-text');
-
+        // Get elements
+        const statusBox = document.getElementById('narrative-text');
         const markerSeed = document.getElementById('marker-seed');
         const markerTree = document.getElementById('marker-tree');
         const markerElder = document.getElementById('marker-elder');
-        
-        // Element references for easier visibility toggling
-        const elementsSeed = document.getElementById('marker-seed').querySelectorAll('a-entity:not([camera])');
-        const elementsTree = document.getElementById('marker-tree').querySelectorAll('a-entity:not([camera])');
-        const elementsElder = document.getElementById('marker-elder').querySelectorAll('a-entity:not([camera])');
 
+        // Get the children entities we want to show/hide
+        const elementsSeed = markerSeed.querySelectorAll('a-entity');
+        const elementsTree = markerTree.querySelectorAll('a-entity');
+        const elementsElder = markerElder.querySelectorAll('a-entity');
+
+        // State tracking
         let seedScanned = false;
         let treeScanned = false;
         let cycleComplete = false;
-        
-        // Helper function to set visibility for all children entities of a marker
+
+        // Helper function to set visibility
         function setMarkerVisibility(elements, isVisible) {
-            elements.forEach(entity => {
-                // Allows models to remain visible if the cycle is complete, even if marker is lost/temporarily hidden.
-                if (cycleComplete || isVisible) {
-                    entity.setAttribute('visible', 'true');
-                } else {
-                    entity.setAttribute('visible', 'false');
-                }
-            });
+            elements.forEach(el => el.setAttribute('visible', isVisible));
         }
 
-        // --- 1. SEED Marker (BIRTH) ---
+        // --- 1. SEED Marker ---
         markerSeed.addEventListener('markerFound', () => {
             setMarkerVisibility(elementsSeed, true);
             if (!seedScanned) {
                 seedScanned = true;
-                narrativeText.innerHTML = '✅ **BIRTH** scanned! Now look for the **TREE** 🌳.';
-            } else if (cycleComplete) {
-                narrativeText.innerHTML = 'Cycle is **complete**. Showing **BIRTH** again.';
+                statusBox.innerHTML = '✅ **BIRTH** scanned! Now look for the **TREE** 🌳.';
             }
         });
         markerSeed.addEventListener('markerLost', () => {
-            if (!cycleComplete) {
-                setMarkerVisibility(elementsSeed, false);
-            }
+            if (!cycleComplete) setMarkerVisibility(elementsSeed, false);
         });
 
-        // --- 2. TREE Marker (FLOURISHING) ---
+        // --- 2. TREE Marker ---
         markerTree.addEventListener('markerFound', () => {
             if (seedScanned) {
                 setMarkerVisibility(elementsTree, true);
                 if (!treeScanned) {
                     treeScanned = true;
-                    narrativeText.innerHTML = '✅ **FLOURISHING** scanned! The final stage is the **BARE TREE** 🍂.';
-                } else if (cycleComplete) {
-                    narrativeText.innerHTML = 'Cycle is **complete**. Showing **FLOURISHING** again.';
+                    statusBox.innerHTML = '✅ **FLOURISHING** scanned! The final stage is the **BARE TREE** 🍂.';
                 }
             } else {
-                setMarkerVisibility(elementsTree, false);
-                narrativeText.innerHTML = '⚠️ Start with the **SEED** marker first! 🌱';
+                statusBox.innerHTML = '⚠️ Start with the **SEED** marker first! 🌱';
             }
         });
         markerTree.addEventListener('markerLost', () => {
-            if (!cycleComplete) {
-                setMarkerVisibility(elementsTree, false);
-            }
+            if (!cycleComplete) setMarkerVisibility(elementsTree, false);
         });
 
-        // --- 3. BARE TREE Marker (WISDOM) ---
+        // --- 3. ELDER Marker ---
         markerElder.addEventListener('markerFound', () => {
             if (seedScanned && treeScanned) {
                 setMarkerVisibility(elementsElder, true);
                 if (!cycleComplete) {
-                    cycleComplete = true; // Final stage completed!
-                    narrativeText.innerHTML = '🎉 **WISDOM** acquired! The **Life Cycle** is **complete**! All scenes are now visible independently.';
-                } else {
-                    narrativeText.innerHTML = 'Cycle is **complete**. Showing **WISDOM** again.';
+                    cycleComplete = true;
+                    statusBox.innerHTML = '🎉 **WISDOM** acquired! The **Life Cycle** is **complete**!';
                 }
             } else if (!seedScanned) {
-                setMarkerVisibility(elementsElder, false);
-                narrativeText.innerHTML = '⚠️ Start with the **SEED** marker first! 🌱';
-            } else { // treeScanned = false
-                setMarkerVisibility(elementsElder, false);
-                narrativeText.innerHTML = '⚠️ The **TREE** stage must be scanned before this one! 🌳';
+                statusBox.innerHTML = '⚠️ Start with the **SEED** marker first! 🌱';
+            } else {
+                statusBox.innerHTML = '⚠️ Scan the **TREE** marker before this one! 🌳';
             }
         });
         markerElder.addEventListener('markerLost', () => {
-            if (!cycleComplete) {
-                setMarkerVisibility(elementsElder, false);
-            }
+            if (!cycleComplete) setMarkerVisibility(elementsElder, false);
         });
 
-        // Initial state: Hide all models and effects
-        [...elementsSeed, ...elementsTree, ...elementsElder].forEach(el => el.setAttribute('visible', 'false'));
+        // --- Initial Hide ---
+        // We must hide the content *after* the scene has loaded
+        document.querySelector('a-scene').addEventListener('loaded', () => {
+            setMarkerVisibility(elementsSeed, false);
+            setMarkerVisibility(elementsTree, false);
+            setMarkerVisibility(elementsElder, false);
+        });
     </script>
 </body>
 </html>
