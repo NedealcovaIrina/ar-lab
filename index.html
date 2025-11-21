@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Quentin Tarantino AR</title>
+  <title>Travel AR Experience</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- A-Frame & AR.js NFT -->
@@ -26,7 +26,7 @@
   </style>
 </head>
 <body>
-  <div id="statusBox">Scan the baby marker first</div>
+  <div id="statusBox">Scan the suitcase marker first</div>
 
   <a-scene
     vr-mode-ui="enabled: false"
@@ -38,42 +38,34 @@
     <a-entity light="type: ambient; intensity: 0.8"></a-entity>
     <a-entity light="type: directional; intensity: 0.6" position="0 1 1"></a-entity>
 
-    <!-- Hollywood marker -->
-    <a-nft id="marker-hollywood" type="nft" url="seed-icon-free-vector">
-      <a-entity id="model-hollywood"
-                gltf-model="baby.glb"
-                scale="110 110 110"
+    <!-- Suitcase marker -->
+    <a-nft id="marker-suitcase" type="nft" url="suitcase-marker">
+      <a-entity id="model-suitcase"
+                gltf-model="world_map_globe.glb"
+                scale="1 1 1"
                 position="0 0 0"
                 rotation="-90 0 0"
                 visible="false"></a-entity>
     </a-nft>
 
-    <!-- Reservoir Dogs marker -->
-    <a-nft id="marker-reservoir" type="nft" url="tree-vector (1)">
-      <a-entity id="model-reservoir"
-                gltf-model="human.glb"
-                scale="60 60 60"
+    <!-- Ocean marker -->
+    <a-nft id="marker-ocean" type="nft" url="ocean-marker">
+      <a-entity id="model-ocean"
+                gltf-model="blue_whale.glb"
+                scale="1 1 1"
                 position="0 0 0"
                 rotation="-90 180 0"
                 visible="false"></a-entity>
     </a-nft>
 
-    <!-- Pulp Fiction marker -->
-    <a-nft id="marker-pulp" type="nft" url="old_tree">
-      <a-entity id="model-pulp"
-                gltf-model="oldman_ernest.glb"
-                scale="20 20 20"
+    <!-- Tokyo marker -->
+    <a-nft id="marker-tokyo" type="nft" url="tokyo-marker">
+      <a-entity id="model-tokyo"
+                gltf-model="sakura.glb"
+                scale="1 1 1"
                 position="0 0 0"
                 rotation="-90 180 0"
                 visible="false"></a-entity>
-    </a-nft>
-
-    <!-- Kill Bill marker -->
-    <a-nft id="marker-killbill" type="nft" url="kill_bill">
-      <a-entity gltf-model="uma_thurman_kill_bill.glb"
-                scale="0.5 0.5 0.5"
-                position="0 0 0"
-                rotation="90 180 180"></a-entity>
     </a-nft>
 
     <a-entity camera></a-entity>
@@ -81,61 +73,57 @@
 
   <script>
     const statusBox = document.getElementById('statusBox');
-    const markerHollywood = document.getElementById('marker-hollywood');
-    const markerReservoir = document.getElementById('marker-reservoir');
-    const markerPulp = document.getElementById('marker-pulp');
+    const markerSuitcase = document.getElementById('marker-suitcase');
+    const markerOcean = document.getElementById('marker-ocean');
+    const markerTokyo = document.getElementById('marker-tokyo');
 
-    const modelHollywood = document.getElementById('model-hollywood');
-    const modelReservoir = document.getElementById('model-reservoir');
-    const modelPulp = document.getElementById('model-pulp');
+    const modelSuitcase = document.getElementById('model-suitcase');
+    const modelOcean = document.getElementById('model-ocean');
+    const modelTokyo = document.getElementById('model-tokyo');
 
-    let hollywoodScanned = false;
-    let reservoirScanned = false;
+    let suitcaseScanned = false;
+    let oceanScanned = false;
 
-    // --- Hollywood ---
-    markerHollywood.addEventListener('markerFound', () => {
-      modelHollywood.setAttribute('visible', 'true');
-      if (!hollywoodScanned) {
-        hollywoodScanned = true;
-        statusBox.innerHTML = '✅ Baby scanned! Now scan the next phase';
+    // --- Suitcase ---
+    markerSuitcase.addEventListener('markerFound', () => {
+      modelSuitcase.setAttribute('visible', 'true');
+      if (!suitcaseScanned) {
+        suitcaseScanned = true;
+        statusBox.innerHTML = '✅ Suitcase scanned! Now scan the ocean';
       }
     });
-    markerHollywood.addEventListener('markerLost', () => {
-      modelHollywood.setAttribute('visible', 'false');
+    markerSuitcase.addEventListener('markerLost', () => {
+      modelSuitcase.setAttribute('visible', 'false');
     });
 
-    // --- Reservoir Dogs ---
-    markerReservoir.addEventListener('markerFound', () => {
-      if (hollywoodScanned) {
-        modelReservoir.setAttribute('visible', 'true');
-        if (!reservoirScanned) {
-          reservoirScanned = true;
-          statusBox.innerHTML = '✅ Adult scanned! Now scan the next phase';
+    // --- Ocean ---
+    markerOcean.addEventListener('markerFound', () => {
+      if (suitcaseScanned) {
+        modelOcean.setAttribute('visible', 'true');
+        if (!oceanScanned) {
+          oceanScanned = true;
+          statusBox.innerHTML = '✅ Ocean scanned! Now scan Tokyo';
         }
       } else {
-        statusBox.innerHTML = '⚠️ Scan baby first!';
+        statusBox.innerHTML = '⚠️ Scan suitcase first!';
       }
     });
-    markerReservoir.addEventListener('markerLost', () => {
-      modelReservoir.setAttribute('visible', 'false');
+    markerOcean.addEventListener('markerLost', () => {
+      modelOcean.setAttribute('visible', 'false');
     });
 
-
-
-
-    // --- Pulp Fiction ---
-    markerPulp.addEventListener('markerFound', () => {
-      if (hollywoodScanned && reservoirScanned) {
-        modelPulp.setAttribute('visible', 'true');
-        statusBox.innerHTML = 'All markers scanned in order! Life-cycle complete';
-      } else if (!reservoirScanned) {
-        statusBox.innerHTML = '⚠️ Scan adult before this';
+    // --- Tokyo ---
+    markerTokyo.addEventListener('markerFound', () => {
+      if (suitcaseScanned && oceanScanned) {
+        modelTokyo.setAttribute('visible', 'true');
+        statusBox.innerHTML = '🌸 All markers scanned! Journey complete';
+      } else if (!oceanScanned) {
+        statusBox.innerHTML = '⚠️ Scan ocean before Tokyo';
       }
     });
-    markerPulp.addEventListener('markerLost', () => {
-      modelPulp.setAttribute('visible', 'false');
+    markerTokyo.addEventListener('markerLost', () => {
+      modelTokyo.setAttribute('visible', 'false');
     });
   </script>
 </body>
 </html>
-
