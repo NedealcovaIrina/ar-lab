@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Travel AR Experience</title>
+  <title>AR Travel Experience</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- A-Frame & AR.js NFT -->
@@ -26,7 +26,7 @@
   </style>
 </head>
 <body>
-  <div id="statusBox">Scan the suitcase marker first</div>
+  <div id="statusBox">Scan the suitcase first</div>
 
   <a-scene
     vr-mode-ui="enabled: false"
@@ -39,32 +39,32 @@
     <a-entity light="type: directional; intensity: 0.6" position="0 1 1"></a-entity>
 
     <!-- Suitcase marker -->
-    <a-nft id="marker-suitcase" type="nft" url="suitcase-marker">
-      <a-entity id="model-suitcase"
-                gltf-model="world_map_globe.glb"
-                scale="1 1 1"
+    <a-nft id="marker-hollywood" type="nft" url="suitcase">
+      <a-entity id="model-hollywood"
+                gltf-model="suitcase.glb"
+                scale="100 100 100"
                 position="0 0 0"
                 rotation="-90 0 0"
                 visible="false"></a-entity>
     </a-nft>
 
     <!-- Ocean marker -->
-    <a-nft id="marker-ocean" type="nft" url="ocean-marker">
-      <a-entity id="model-ocean"
-                gltf-model="blue_whale.glb"
-                scale="1 1 1"
+    <a-nft id="marker-reservoir" type="nft" url="ocean">
+      <a-entity id="model-reservoir"
+                gltf-model="world_map_globe.glb"
+                scale="50 50 50"
                 position="0 0 0"
-                rotation="-90 180 0"
+                rotation="90 180 0"
                 visible="false"></a-entity>
     </a-nft>
 
     <!-- Tokyo marker -->
-    <a-nft id="marker-tokyo" type="nft" url="tokyo-marker">
-      <a-entity id="model-tokyo"
+    <a-nft id="marker-pulp" type="nft" url="tokio">
+      <a-entity id="model-pulp"
                 gltf-model="sakura.glb"
-                scale="1 1 1"
+                scale="10 10 10"
                 position="0 0 0"
-                rotation="-90 180 0"
+                rotation="90 180 0"
                 visible="false"></a-entity>
     </a-nft>
 
@@ -73,56 +73,56 @@
 
   <script>
     const statusBox = document.getElementById('statusBox');
-    const markerSuitcase = document.getElementById('marker-suitcase');
-    const markerOcean = document.getElementById('marker-ocean');
-    const markerTokyo = document.getElementById('marker-tokyo');
+    const markerHollywood = document.getElementById('marker-hollywood');
+    const markerReservoir = document.getElementById('marker-reservoir');
+    const markerPulp = document.getElementById('marker-pulp');
 
-    const modelSuitcase = document.getElementById('model-suitcase');
-    const modelOcean = document.getElementById('model-ocean');
-    const modelTokyo = document.getElementById('model-tokyo');
+    const modelHollywood = document.getElementById('model-hollywood');
+    const modelReservoir = document.getElementById('model-reservoir');
+    const modelPulp = document.getElementById('model-pulp');
 
-    let suitcaseScanned = false;
-    let oceanScanned = false;
+    let hollywoodScanned = false;
+    let reservoirScanned = false;
 
     // --- Suitcase ---
-    markerSuitcase.addEventListener('markerFound', () => {
-      modelSuitcase.setAttribute('visible', 'true');
-      if (!suitcaseScanned) {
-        suitcaseScanned = true;
-        statusBox.innerHTML = '✅ Suitcase scanned! Now scan the ocean';
+    markerHollywood.addEventListener('markerFound', () => {
+      modelHollywood.setAttribute('visible', 'true');
+      if (!hollywoodScanned) {
+        hollywoodScanned = true;
+        statusBox.innerHTML = '✅ Suitcase scanned! Now scan the ocean.';
       }
     });
-    markerSuitcase.addEventListener('markerLost', () => {
-      modelSuitcase.setAttribute('visible', 'false');
+    markerHollywood.addEventListener('markerLost', () => {
+      modelHollywood.setAttribute('visible', 'false');
     });
 
     // --- Ocean ---
-    markerOcean.addEventListener('markerFound', () => {
-      if (suitcaseScanned) {
-        modelOcean.setAttribute('visible', 'true');
-        if (!oceanScanned) {
-          oceanScanned = true;
-          statusBox.innerHTML = '✅ Ocean scanned! Now scan Tokyo';
+    markerReservoir.addEventListener('markerFound', () => {
+      if (hollywoodScanned) {
+        modelReservoir.setAttribute('visible', 'true');
+        if (!reservoirScanned) {
+          reservoirScanned = true;
+          statusBox.innerHTML = '🌍 Ocean scanned! Now scan Tokyo.';
         }
       } else {
-        statusBox.innerHTML = '⚠️ Scan suitcase first!';
+        statusBox.innerHTML = '⚠️ Scan the suitcase first!';
       }
     });
-    markerOcean.addEventListener('markerLost', () => {
-      modelOcean.setAttribute('visible', 'false');
+    markerReservoir.addEventListener('markerLost', () => {
+      modelReservoir.setAttribute('visible', 'false');
     });
 
     // --- Tokyo ---
-    markerTokyo.addEventListener('markerFound', () => {
-      if (suitcaseScanned && oceanScanned) {
-        modelTokyo.setAttribute('visible', 'true');
-        statusBox.innerHTML = '🌸 All markers scanned! Journey complete';
-      } else if (!oceanScanned) {
-        statusBox.innerHTML = '⚠️ Scan ocean before Tokyo';
+    markerPulp.addEventListener('markerFound', () => {
+      if (hollywoodScanned && reservoirScanned) {
+        modelPulp.setAttribute('visible', 'true');
+        statusBox.innerHTML = '🌸 Tokyo scanned! Journey complete!';
+      } else if (!reservoirScanned) {
+        statusBox.innerHTML = '⚠️ Scan the ocean before Tokyo!';
       }
     });
-    markerTokyo.addEventListener('markerLost', () => {
-      modelTokyo.setAttribute('visible', 'false');
+    markerPulp.addEventListener('markerLost', () => {
+      modelPulp.setAttribute('visible', 'false');
     });
   </script>
 </body>
